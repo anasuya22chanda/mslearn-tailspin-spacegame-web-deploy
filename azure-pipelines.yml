@@ -75,4 +75,15 @@ stages:
     environment: dev
     variables:
     - group: Release
-    
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: 'tailspin-space-game-web-22'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
